@@ -1,0 +1,101 @@
+{
+  "experiment_name": "robust_plastic_classification",
+  "output_dir": "../outputs",
+  "seed": 42,
+  "num_runs": 3,
+  "datasets": [
+    {
+      "name": "dataset_a",
+      "root": "../data/dataset_a",
+      "class_aliases": {
+        "pet": "PET",
+        "hdpe": "HDPE",
+        "pvc": "PVC",
+        "ldpe": "LDPE",
+        "pp": "PP",
+        "ps": "PS"
+      }
+    },
+    {
+      "name": "dataset_b",
+      "root": "../data/dataset_b",
+      "class_aliases": {
+        "polyethylene_terephthalate": "PET",
+        "high_density_polyethylene": "HDPE",
+        "polyvinyl_chloride": "PVC",
+        "low_density_polyethylene": "LDPE",
+        "polypropylene": "PP",
+        "polystyrene": "PS"
+      }
+    }
+  ],
+  "data": {
+    "image_size": 224,
+    "val_ratio": 0.1,
+    "test_ratio": 0.2,
+    "batch_size": 32,
+    "num_workers": 4,
+    "pin_memory": true,
+    "weighted_sampling": true,
+    "use_randaugment": true,
+    "randaugment_num_ops": 2,
+    "randaugment_magnitude": 9,
+    "horizontal_flip_probability": 0.5,
+    "train_crop_scale_min": 0.7,
+    "train_crop_scale_max": 1.0,
+    "color_jitter_brightness": 0.4,
+    "color_jitter_contrast": 0.4,
+    "color_jitter_saturation": 0.2,
+    "color_jitter_hue": 0.05,
+    "gaussian_noise_std": 0.03,
+    "gaussian_noise_probability": 0.5,
+    "random_erasing_probability": 0.25,
+    "eval_resize_scale": 1.14
+  },
+  "model": {
+    "name": "efficientnet_b0",
+    "pretrained": true,
+    "dropout": 0.35,
+    "freeze_backbone": false,
+    "use_mixstyle": true,
+    "mixstyle_probability": 0.5,
+    "mixstyle_alpha": 0.1,
+    "mixstyle_layers": 2
+  },
+  "training": {
+    "epochs": 20,
+    "optimizer": "adamw",
+    "learning_rate": 0.0003,
+    "weight_decay": 0.0001,
+    "scheduler": "cosine",
+    "min_learning_rate": 1e-06,
+    "early_stopping_patience": 5,
+    "label_smoothing": 0.05,
+    "amp": true,
+    "use_mixup": true,
+    "mixup_alpha": 0.2,
+    "use_cutmix": false,
+    "cutmix_alpha": 1.0,
+    "cutmix_probability": 0.5,
+    "use_coral": true,
+    "coral_weight": 0.1,
+    "enable_tensorboard": true,
+    "use_torch_compile": true,
+    "gradient_clip_norm": 1.0,
+    "gradient_accumulation_steps": 1,
+    "track_loss_ratio": true
+  },
+  "evaluation": {
+    "run_pairwise_cross_dataset": true,
+    "run_combined_experiment": true,
+    "use_target_test_split": true,
+    "run_feature_baseline": true,
+    "save_confusion_matrices": true,
+    "run_ablations": true,
+    "disable_mixstyle": true,
+    "disable_mixup": true,
+    "disable_weighted_sampling": true,
+    "use_tta": true,
+    "tta_steps": 3
+  }
+}
